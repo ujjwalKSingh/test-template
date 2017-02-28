@@ -1,5 +1,5 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2017-02-28/deploymentTemplate.json",
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
    "vmName": {
@@ -29,7 +29,7 @@
       "type": "string",
       "defaultValue": "9.2.0.89",
       "metadata": {
-        "description": "The Ubuntu version for the VM. This will pick a fully patched image of this given Ubuntu version. Allowed values: 12.04.5-LTS, 14.04.4-LTS, 15.10."
+        "description": "Netscaler SD-WAN Standard Edition VM version 9.2.0-89 beta edition."
       }
     }
   },
@@ -45,7 +45,7 @@
 
     "nic1Name": "sdwanwannic",
     "nic2Name": "sdwanlannic",
-	"nic3Name": "sdwanmgmtnic",
+     "nic3Name": "sdwanmgmtnic",
 
     "vnetName": "vnet",
     "vnetId": "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]",
