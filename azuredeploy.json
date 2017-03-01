@@ -11,6 +11,7 @@
     },
     "sshKeyData": {
       "type": "string",
+      "defaultValue": "password123$%^"
       "metadata": {
         "description": "SSH rsa public key file as a string."
       }
@@ -249,15 +250,7 @@
           "computerName": "[parameters('vmName')]",
           "adminUsername": "[parameters('adminUsername')]",
           "linuxConfiguration": {
-            "disablePasswordAuthentication": "true",
-            "ssh": {
-              "publicKeys": [
-                {
-                  "path": "[variables('sshKeyPath')]",
-                  "keyData": "[parameters('sshKeyData')]"
-                }
-              ]
-            }
+            "disablePasswordAuthentication": "false"
           }
         },
         "storageProfile": {
