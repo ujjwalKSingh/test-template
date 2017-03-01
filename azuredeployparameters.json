@@ -6,7 +6,7 @@
       "value": "azureuser"
     },
     "sshKeyData": {
-      "value": "GEN-SSH-PUB-KEY"
+      "value": "password123$%^"
     },
     "vmName": {
       "value": "GEN-UNIQUE"
