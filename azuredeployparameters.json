@@ -5,8 +5,8 @@
     "adminUsername": {
       "value": "azureuser"
     },
-    "sshKeyData": {
-      "value": "password123$%^"
+    "adminPassword": {
+      "value" : "" 
     },
     "vmName": {
       "value": "GEN-UNIQUE"
