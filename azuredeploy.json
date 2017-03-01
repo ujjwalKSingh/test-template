@@ -11,7 +11,7 @@
     },
     "sshKeyData": {
       "type": "string",
-      "defaultValue": "password123$%^"
+      "defaultValue": "password123$%^",
       "metadata": {
         "description": "SSH rsa public key file as a string."
       }
