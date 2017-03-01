@@ -9,12 +9,11 @@
         "description": "User name for the Virtual Machine."
       }
     },
-    "sshKeyData": {
-      "type": "string",
-      "defaultValue": "password123$%^",
-      "metadata": {
-        "description": "SSH rsa public key file as a string."
-      }
+    "adminPassword": {
+       "type": "securestring",
+       "metadata": {
+       "description": "Admin password"
+       }
     },
     "dnsLabelPrefix": {
       "type": "string",
@@ -249,9 +248,7 @@
         "osProfile": {
           "computerName": "[parameters('vmName')]",
           "adminUsername": "[parameters('adminUsername')]",
-          "linuxConfiguration": {
-            "disablePasswordAuthentication": "false"
-          }
+          "adminPassword": "[parameters('adminPassword')]"
         },
         "storageProfile": {
           "imageReference": {
