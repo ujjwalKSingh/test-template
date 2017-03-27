@@ -1,0 +1,203 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+  "handler": "Microsoft.Compute.MultiVm",
+  "version": "0.1.2-preview",
+  "parameters": {
+    "basics": [
+
+    ],
+    "steps": [
+      {
+        "name": "infraConfig",
+        "label": "Administrator settings",
+        "subLabel": {
+          "preValidation": "Configure deployment settings",
+          "postValidation": "Done"
+        },
+        "bladeTitle": "Administrator settings",
+        "elements": [
+          {
+            "name": "Name",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Virtual Machine name",
+            "toolTip": "The name of the Virtual Machine.",
+            "constraints": {
+              "required": true
+            }
+          },
+          {
+            "name": "adminUsername",
+            "type": "Microsoft.Compute.UserNameTextBox",
+            "label": "Username",
+            "toolTip": "Admin username for the virtual machines.",
+            "osPlatform": "Linux",
+            "constraints": {
+              "required": true
+            }
+          },
+          {
+            "name": "Credentials",
+            "type": "Microsoft.Common.PasswordBox",
+            "label": {
+              "password": "Password",
+              "confirmPassword": "Confirm password"
+            },
+            "toolTip": {
+              "password": "Password for the Virtual Machine"
+            },
+            "constraints": {
+              "required": true
+            },
+            "options": {
+              "hideConfirmation": false
+            },
+            "osPlatform": "Windows"
+          }
+        ]
+      },
+      {
+        "name": "SDWANmyapplianceConfig",
+        "label": "SDWAN myappliance settings",
+        "subLabel": {
+          "preValidation": "Configure the myappliance settings",
+          "postValidation": "Done"
+        },
+        "bladeTitle": "SDWAN myappliance settings",
+        "elements": [
+          {
+            "name": "Size",
+            "type": "Microsoft.Compute.SizeSelector",
+            "label": "Virtual machine size",
+            "toolTip": "The size of virtual machine to provision.",
+            "recommendedSizes": [
+              "Standard_D3_v2",
+              "Standard_D4_v2",
+              "Standard_DS4_v2"
+            ],
+            "constraints": {
+              "allowedSizes": [
+                "Standard_D3_v2",
+                "Standard_D4_v2",
+                "Standard_DS4_v2"
+              ]
+                          },
+            "osPlatform": "Linux",
+            "imageReference": {
+              "publisher": "citrix",
+              "offer": "netscaler-sd-wan",
+              "sku": "netscalersd-wanstandardedition"
+            },
+            "count": "1"
+          },
+          {
+            "name": "storageAccount",
+            "type": "Microsoft.Storage.StorageAccountSelector",
+            "label": "Storage account",
+            "toolTip": "Storage Account for the Virtual Machine's Disks",
+            "defaultValue": {
+              "type": "Standard_LRS"
+            },
+            "constraints": {
+              "allowedTypes": [
+                "Standard_LRS",
+                "Standard_GRS",
+                "Premium_LRS"
+              ]
+              
+            }
+          },
+          {
+            "name": "publicIpAddress",
+            "type": "Microsoft.Network.PublicIpAddressCombo",
+            "label": {
+              "publicIpAddress": "Public IP address",
+              "domainNameLabel": "DNS label"
+            },
+            "toolTip": {
+              "domainNameLabel": "DNS label for the Virtual Machine's public IP address."
+            },
+            "defaultValue": {
+              "publicIpAddressName": ""
+            },
+            "options": {
+              "hideNone": true
+            }
+          },
+          {
+            "name": "virtualNetwork",
+            "type": "Microsoft.Network.VirtualNetworkCombo",
+            "label": {
+              "virtualNetwork": "Virtual network",
+              "subnets": "Subnets"
+            },
+            "toolTip": {
+              "virtualNetwork": "Virtual Network Name",
+              "subnets": "Subnets requied for the SD-WAN myappliance solution"
+            },
+            "defaultValue": {
+              "name": "vnet01",
+              "addressPrefixSize": "/16"
+            },
+            "constraints": {
+              "minAddressPrefixSize": "/16"
+            },
+            "subnets": {
+              "subnet1": {
+                "label": "WAN subnet",
+                "constraints": {
+                  "minAddressPrefixSize": "/24",
+                  "minAddressCount": 12,
+                  "requireContiguousAddresses": false
+                }
+              },
+              "subnet2": {
+                "label": "LAN subnet",
+                "constraints": {
+                  "minAddressPrefixSize": "/24",
+                  "minAddressCount": 12,
+                  "requireContiguousAddresses": false
+                }
+              },
+              "subnet3": {
+                "label": "Management subnet",
+                "constraints": {
+                  "minAddressPrefixSize": "/24",
+                  "minAddressCount": 12,
+                  "requireContiguousAddresses": false
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "outputs": {
+      "vmName": "[steps('infraConfig').Name]",
+      "adminUsername": "[steps('infraConfig').adminUsername]",
+      "adminPassword": "[steps('infraConfig').Credentials]",
+      "vmSize": "[steps('SDWANmyapplianceConfig').Size]",
+      "Location": "[location()]",
+      "newStorageAccountName": "[steps('SDWANmyapplianceConfig').storageAccount.name]",
+      "storageAccountType": "[steps('SDWANmyapplianceConfig').storageAccount.type]",
+      "storageAccountNewOrExisting": "[steps('SDWANmyapplianceConfig').storageAccount.newOrExisting]",
+      "storageAccountExistingRG": "[steps('SDWANmyapplianceConfig').storageAccount.resourceGroup]",
+      "publicIPAddressName": "[steps('SDWANmyapplianceConfig').publicIpAddress.name]",
+      "publicIPDnsName": "[steps('SDWANmyapplianceConfig').publicIpAddress.domainNameLabel]",
+      "publicIPNewOrExisting": "[steps('SDWANmyapplianceConfig').publicIpAddress.newOrExistingOrNone]",
+      "publicIPExistingRGName": "[steps('SDWANmyapplianceConfig').publicIpAddress.resourceGroup]",
+      "virtualNetworkName": "[steps('SDWANmyapplianceConfig').virtualNetwork.name]",
+      "virtualNetworkAddressPrefix": "[steps('SDWANmyapplianceConfig').virtualNetwork.addressPrefix]",
+      "Subnet1Name": "[steps('SDWANmyapplianceConfig').virtualNetwork.subnets.subnet1.name]",
+      "Subnet1Prefix": "[steps('SDWANmyapplianceConfig').virtualNetwork.subnets.subnet1.addressPrefix]",
+      "Subnet2Name": "[steps('SDWANmyapplianceConfig').virtualNetwork.subnets.subnet2.name]",
+      "Subnet2Prefix": "[steps('SDWANmyapplianceConfig').virtualNetwork.subnets.subnet2.addressPrefix]",
+      "Subnet3Name": "[steps('SDWANmyapplianceConfig').virtualNetwork.subnets.subnet3.name]",
+      "Subnet3Prefix": "[steps('SDWANmyapplianceConfig').virtualNetwork.subnets.subnet3.addressPrefix]",
+      "vnetNewOrExisting": "[steps('SDWANmyapplianceConfig').virtualNetwork.newOrExisting]",
+      "virtualNetworkExistingRGName": "[steps('SDWANmyapplianceConfig').virtualNetwork.resourceGroup]",
+      "subnet1StartAddress": "[steps('SDWANmyapplianceConfig').virtualNetwork.subnets.subnet1.startAddress]",
+      "subnet2StartAddress": "[steps('SDWANmyapplianceConfig').virtualNetwork.subnets.subnet2.startAddress]",
+      "subnet3StartAddress": "[steps('SDWANmyapplianceConfig').virtualNetwork.subnets.subnet3.startAddress]"
+    }
+  }
+}
